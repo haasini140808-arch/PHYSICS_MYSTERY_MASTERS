@@ -284,6 +284,16 @@ footer {
 
 <body>
 
+<div id="welcomeScreen" style="text-align:center; padding:60px 20px; background:#f5f2ff; min-height:70vh;">
+    <h1>🔬 Physics Mystery Masters</h1>
+    <h2>Ready to Solve the Mystery?</h2>
+    <p>Discover famous scientists through 20 exciting physics clues!</p>
+    <p>Choose the correct answer, earn points, and test your knowledge.</p>
+    <button onclick="startQuiz()" style="padding:12px 30px; background:#6c3fc5; color:white; border:none; border-radius:8px; font-size:18px; cursor:pointer;">
+        ▶ Play Quiz
+    </button>
+</div>
+
 <header>
     <div class="logo">⚛ Physics Mystery Masters</div>
     <div class="header-tag">FA 1 • CO 1 & CO 2</div>
@@ -791,6 +801,13 @@ function restartQuiz() {
 }
 
 loadQuestion();
+
+function startQuiz() {
+    document.getElementById("welcomeScreen").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+    document.getElementById("quiz").scrollIntoView();
+    loadQuestion();
+}
 
 </script>
 
