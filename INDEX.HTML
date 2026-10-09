@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physics Mystery Masters</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f2ff;
+    color: #292044;
+}
+
+header {
+    background: white;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e7dfff;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #7041c5;
+}
+
+.header-tag {
+    color: #7959b5;
+    font-size: 13px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.hero {
+    background: linear-gradient(135deg, #7041c5, #9c76e8);
+    color: white;
+    padding: 35px;
+    border-radius: 22px;
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    margin-top: 0;
+    font-size: 32px;
+}
+
+.hero p {
+    line-height: 1.7;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px #ded5f5;
+}
+
+.stat h2 {
+    color: #7041c5;
+    margin: 0 0 8px;
+}
+
+.stat p {
+    margin: 0;
+    font-size: 13px;
+    color: #746a89;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px #e4dcf5;
+}
+
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    color: #7655b7;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.progress-bg {
+    background: #eee8fb;
+    height: 9px;
+    border-radius: 20px;
+    margin: 15px 0 25px;
+    overflow: hidden;
+}
+
+#progress {
+    background: #8657dc;
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+#question {
+    font-size: 21px;
+    line-height: 1.6;
+    margin: 20px 0;
+}
+
+.options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.option {
+    padding: 16px;
+    background: #faf8ff;
+    border: 2px solid #e6def8;
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+    color: #35264f;
+    transition: 0.2s;
+}
+
+.option:hover:not(:disabled) {
+    border-color: #8758d8;
+    background: #f1eaff;
+}
+
+.option:disabled {
+    cursor: default;
+}
+
+.option.correct {
+    background: #e1f8eb;
+    border-color: #2da66a;
+}
+
+.option.wrong {
+    background: #ffe8e8;
+    border-color: #e25b65;
+}
+
+#feedback {
+    display: none;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 12px;
+    line-height: 1.6;
+}
+
+#feedback.good {
+    display: block;
+    background: #e7f9ee;
+    color: #176c41;
+}
+
+#feedback.bad {
+    display: block;
+    background: #fff0f0;
+    color: #a52b39;
+}
+
+button.main-btn {
+    background: #7041c5;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 22px;
+}
+
+button.main-btn:hover {
+    background: #5930a4;
+}
+
+#nextBtn {
+    display: none;
+}
+
+#result {
+    display: none;
+    text-align: center;
+}
+
+.result-icon {
+    font-size: 60px;
+}
+
+#result h2 {
+    color: #7041c5;
+    font-size: 30px;
+}
+
+#finalScore {
+    font-size: 42px;
+    color: #7041c5;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+#resultMessage {
+    line-height: 1.7;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #807492;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 18px;
+    }
+
+    .logo {
+        font-size: 17px;
+    }
+
+    .container {
+        margin: 20px auto;
+        padding: 0 12px;
+    }
+
+    .hero {
+        padding: 25px;
+    }
+
+    .hero h1 {
+        font-size: 26px;
+    }
+
+    .stats {
+        gap: 8px;
+    }
+
+    .stat {
+        padding: 14px 5px;
+    }
+
+    .stat p {
+        font-size: 11px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .options {
+        grid-template-columns: 1fr;
+    }
+
+    #question {
+        font-size: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">⚛ Physics Mystery Masters</div>
+    <div class="header-tag">FA 1 • CO 1 & CO 2</div>
+</header>
+
+<div class="container">
+
+    <section class="hero">
+        <h1>Unlock the Mystery of Science!</h1>
+        <p>
+            Can you identify the legendary scientists from their
+            discoveries, experiments and theories?
+            Test your physics knowledge with 20 mystery clues.
+        </p>
+    </section>
+
+    <section class="stats">
+        <div class="stat">
+            <h2>20</h2>
+            <p>Total Questions</p>
+        </div>
+        <div class="stat">
+            <h2 id="score">0</h2>
+            <p>Correct Answers</p>
+        </div>
+        <div class="stat">
+            <h2 id="answered">0/20</h2>
+            <p>Completed</p>
+        </div>
+    </section>
+
+    <section class="card" id="quiz">
+
+        <div class="top-row">
+            <span id="category">CO 1 • OPTICS</span>
+            <span id="questionNo">Question 1 of 20</span>
+        </div>
+
+        <div class="progress-bg">
+            <div id="progress"></div>
+        </div>
+
+        <h2 id="question"></h2>
+
+        <div class="options" id="options"></div>
+
+        <div id="feedback"></div>
+
+        <button class="main-btn" id="nextBtn" onclick="nextQuestion()">
+            Next Question →
+        </button>
+
+    </section>
+
+    <section class="card" id="result">
+
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <h2>Quiz Completed!</h2>
+        <p>You have finished Physics Mystery Masters.</p>
+
+        <div id="finalScore">0/20</div>
+        <h3 id="percentage"></h3>
+        <p id="resultMessage"></p>
+
+        <button class="main-btn" onclick="restartQuiz()">
+            Try Again ↻
+        </button>
+
+    </section>
+
+</div>
+
+<footer>
+    Physics Mystery Masters | Learn • Discover • Achieve
+</footer>
+
+<script>
+
+const questions = [
+
+{
+    category: "CO 1 • OPTICS",
+    clue: "I explained the relationship between the angles of incidence and refraction. Who am I?",
+    options: [
+        "Lord Rayleigh",
+        "Willebrord Snellius",
+        "Augustin-Jean Fresnel",
+        "Johannes Kepler"
+    ],
+    answer: 1,
+    info: "Willebrord Snellius is associated with Snell's law of refraction."
+},
+
+{
+    category: "CO 1 • OPTICS",
+    clue: "I developed the first working laser in 1960. Identify me.",
+    options: [
+        "Charles K. Kao",
+        "Joseph W. Lechleider",
+        "Theodore H. Maiman",
+        "Narinder Singh Kapany"
+    ],
+    answer: 2,
+    info: "Theodore H. Maiman demonstrated the first functioning laser in 1960."
+},
+
+{
+    category: "CO 1 • OPTICS",
+    clue: "According to our assignment list, my topic concerns the complete reflection of light inside a denser medium. Who am I?",
+    options: [
+        "Johannes Kepler",
+        "Willebrord Snellius",
+        "Lord Rayleigh",
+        "Theodore H. Maiman"
+    ],
+    answer: 0,
+    info: "Johannes Kepler is the scientist assigned to this clue in your supplied list."
+},
+
+{
+    category: "CO 1 • OPTICS",
+    clue: "I explained why the sky appears blue because of the scattering of sunlight. Identify me.",
+    options: [
+        "Augustin-Jean Fresnel",
+        "Charles K. Kao",
+        "Johannes Kepler",
+        "Lord Rayleigh"
+    ],
+    answer: 3,
+    info: "Lord Rayleigh is associated with Rayleigh scattering, which explains the blue sky."
+},
+
+{
+    category: "CO 1 • OPTICS",
+    clue: "My work helped establish the wave theory of light. Who am I?",
+    options: [
+        "Theodore H. Maiman",
+        "Augustin-Jean Fresnel",
+        "Joseph W. Lechleider",
+        "Willebrord Snellius"
+    ],
+    answer: 1,
+    info: "Augustin-Jean Fresnel made important contributions to the wave theory of light."
+},
+
+{
+    category: "CO 1 • OPTICS",
+    clue: "I am known as the father of fibre optics. Identify me.",
+    options: [
+        "Lord Rayleigh",
+        "Charles K. Kao",
+        "Narinder Singh Kapany",
+        "Theodore H. Maiman"
+    ],
+    answer: 2,
+    info: "Narinder Singh Kapany is widely known as the father of fibre optics."
+},
+
+{
+    category: "CO 1 • OPTICS",
+    clue: "My research helped explain how light signals could travel through optical fibres with less power loss. Who am I?",
+    options: [
+        "Charles K. Kao",
+        "Johannes Kepler",
+        "Joseph W. Lechleider",
+        "Augustin-Jean Fresnel"
+    ],
+    answer: 0,
+    info: "Charles K. Kao pioneered research into low-loss optical fibre communication."
+},
+
+{
+    category: "CO 1 • OPTICS",
+    clue: "My work on optical fibre communication helped make high-capacity, high-speed communication possible. Identify me.",
+    options: [
+        "Narinder Singh Kapany",
+        "Lord Rayleigh",
+        "Theodore H. Maiman",
+        "Charles K. Kao"
+    ],
+    answer: 3,
+    info: "Charles K. Kao's research helped make high-capacity optical communication practical."
+},
+
+{
+    category: "CO 1 • OPTICS",
+    clue: "I contributed to the development of broadband transmission over telephone lines. Who am I?",
+    options: [
+        "Willebrord Snellius",
+        "Joseph W. Lechleider",
+        "Charles K. Kao",
+        "Narinder Singh Kapany"
+    ],
+    answer: 1,
+    info: "Joseph W. Lechleider contributed to the development of DSL broadband technology."
+},
+
+{
+    category: "CO 1 • OPTICS",
+    clue: "My research helped establish that optical fibres could transmit information with very low signal loss. Identify me.",
+    options: [
+        "Theodore H. Maiman",
+        "Augustin-Jean Fresnel",
+        "Charles K. Kao",
+        "Lord Rayleigh"
+    ],
+    answer: 2,
+    info: "Charles K. Kao's pioneering work helped establish the feasibility of low-loss optical fibres."
+},
+
+{
+    category: "CO 2 • QUANTUM PHYSICS",
+    clue: "I proposed that moving material particles have an associated wavelength. Who am I?",
+    options: [
+        "Max Planck",
+        "Louis de Broglie",
+        "Richard Feynman",
+        "Albert Einstein"
+    ],
+    answer: 1,
+    info: "Louis de Broglie proposed the matter-wave concept, expressed as λ = h/p."
+},
+
+{
+    category: "CO 2 • QUANTUM PHYSICS",
+    clue: "My equation describes the quantum state of a system and how it evolves with time. Identify me.",
+    options: [
+        "G. P. Thomson",
+        "Max Planck",
+        "Erwin Schrödinger",
+        "Philipp Lenard"
+    ],
+    answer: 2,
+    info: "Erwin Schrödinger formulated the wave equation central to quantum mechanics."
+},
+
+{
+    category: "CO 2 • QUANTUM PHYSICS",
+    clue: "I explained the photoelectric effect using light quanta, also called photons. Who am I?",
+    options: [
+        "Albert Einstein",
+        "Heinrich Rudolf Hertz",
+        "Richard Feynman",
+        "Louis de Broglie"
+    ],
+    answer: 0,
+    info: "Albert Einstein explained the photoelectric effect using quantized light."
+},
+
+{
+    category: "CO 2 • QUANTUM PHYSICS",
+    clue: "I introduced energy quanta to explain blackbody radiation. Identify me.",
+    options: [
+        "Erwin Schrödinger",
+        "Philipp Lenard",
+        "Albert Einstein",
+        "Max Planck"
+    ],
+    answer: 3,
+    info: "Max Planck introduced energy quantization in his explanation of blackbody radiation."
+},
+
+{
+    category: "CO 2 • QUANTUM PHYSICS",
+    clue: "My model describes a particle confined within a restricted region, producing discrete energy levels. Who am I?",
+    options: [
+        "Louis de Broglie",
+        "Erwin Schrödinger",
+        "G. P. Thomson",
+        "Max Planck"
+    ],
+    answer: 1,
+    info: "The particle-in-a-box model is a standard quantum-mechanics problem solved using Schrödinger's equation."
+},
+
+{
+    category: "CO 2 • QUANTUM PHYSICS",
+    clue: "I experimentally demonstrated electron diffraction, supporting the wave nature of electrons. Identify me.",
+    options: [
+        "Richard Feynman",
+        "Philipp Lenard",
+        "G. P. Thomson",
+        "Heinrich Rudolf Hertz"
+    ],
+    answer: 2,
+    info: "G. P. Thomson demonstrated electron diffraction through thin metal films."
+},
+
+{
+    category: "CO 2 • QUANTUM PHYSICS",
+    clue: "My experiments helped establish the existence of electromagnetic waves. I am also associated with early photoelectric observations. Who am I?",
+    options: [
+        "Heinrich Rudolf Hertz",
+        "Albert Einstein",
+        "Philipp Lenard",
+        "Davisson and Germer"
+    ],
+    answer: 0,
+    info: "Heinrich Rudolf Hertz demonstrated electromagnetic waves and observed the photoelectric effect."
+},
+
+{
+    category: "CO 2 • QUANTUM PHYSICS",
+    clue: "Our experiment demonstrated electron diffraction when electrons were scattered by a crystal. Identify us.",
+    options: [
+        "G. P. Thomson",
+        "Louis de Broglie",
+        "Erwin Schrödinger",
+        "Davisson and Germer"
+    ],
+    answer: 3,
+    info: "Clinton Davisson and Lester Germer demonstrated electron diffraction using a nickel crystal."
+},
+
+{
+    category: "CO 2 • QUANTUM PHYSICS",
+    clue: "I developed a quantum approach in which the possible paths of a particle contribute to its probability amplitude. Who am I?",
+    options: [
+        "Max Planck",
+        "Richard Feynman",
+        "Albert Einstein",
+        "Philipp Lenard"
+    ],
+    answer: 1,
+    info: "Richard Feynman developed the path-integral formulation of quantum mechanics."
+},
+
+{
+    category: "CO 2 • QUANTUM PHYSICS",
+    clue: "I experimentally investigated the laws of photoelectric emission. Identify me.",
+    options: [
+        "Heinrich Rudolf Hertz",
+        "Albert Einstein",
+        "Philipp Lenard",
+        "G. P. Thomson"
+    ],
+    answer: 2,
+    info: "Philipp Lenard investigated photoelectric emission and its experimental laws."
+}
+
+];
+
+let currentQuestion = 0;
+let score = 0;
+let hasAnswered = false;
+
+function loadQuestion() {
+
+    hasAnswered = false;
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("category").textContent = q.category;
+    document.getElementById("questionNo").textContent =
+        "Question " + (currentQuestion + 1) + " of " + questions.length;
+
+    document.getElementById("question").textContent = q.clue;
+
+    document.getElementById("progress").style.width =
+        (currentQuestion / questions.length * 100) + "%";
+
+    document.getElementById("feedback").className = "";
+    document.getElementById("feedback").style.display = "none";
+    document.getElementById("nextBtn").style.display = "none";
+
+    const optionsBox = document.getElementById("options");
+    optionsBox.innerHTML = "";
+
+    q.options.forEach(function(option, index) {
+
+        const button = document.createElement("button");
+
+        button.className = "option";
+        button.textContent =
+            String.fromCharCode(65 + index) + ". " + option;
+
+        button.onclick = function() {
+            checkAnswer(index, button);
+        };
+
+        optionsBox.appendChild(button);
+
+    });
+
+}
+
+function checkAnswer(selected, selectedButton) {
+
+    if (hasAnswered) return;
+
+    hasAnswered = true;
+
+    const q = questions[currentQuestion];
+    const allOptions = document.querySelectorAll(".option");
+    const feedback = document.getElementById("feedback");
+
+    allOptions.forEach(function(button) {
+        button.disabled = true;
+    });
+
+    if (selected === q.answer) {
+
+        score++;
+
+        selectedButton.classList.add("correct");
+
+        feedback.className = "good";
+        feedback.innerHTML =
+            "<strong>✓ Correct! Great job!</strong><br>" + q.info;
+
+    } else {
+
+        selectedButton.classList.add("wrong");
+        allOptions[q.answer].classList.add("correct");
+
+        feedback.className = "bad";
+        feedback.innerHTML =
+            "<strong>✗ Not quite!</strong><br>" +
+            "Correct answer: " + q.options[q.answer] +
+            "<br>" + q.info;
+
+    }
+
+    document.getElementById("score").textContent = score;
+
+    document.getElementById("answered").textContent =
+        (currentQuestion + 1) + "/" + questions.length;
+
+    document.getElementById("progress").style.width =
+        ((currentQuestion + 1) / questions.length * 100) + "%";
+
+    document.getElementById("nextBtn").style.display = "inline-block";
+
+    if (currentQuestion === questions.length - 1) {
+        document.getElementById("nextBtn").textContent = "View Results 🏆";
+    } else {
+        document.getElementById("nextBtn").textContent = "Next Question →";
+    }
+
+}
+
+function nextQuestion() {
+
+    if (!hasAnswered) return;
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+        loadQuestion();
+    } else {
+        showResults();
+    }
+
+}
+
+function showResults() {
+
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("result").style.display = "block";
+
+    const percentage = Math.round(score / questions.length * 100);
+
+    document.getElementById("finalScore").textContent =
+        score + " / " + questions.length;
+
+    document.getElementById("percentage").textContent =
+        percentage + "% Score";
+
+    let message;
+
+    if (percentage >= 90) {
+        message = "Outstanding! You are a Physics Master!";
+        document.getElementById("resultIcon").textContent = "🏆";
+    } else if (percentage >= 70) {
+        message = "Excellent work! Keep revising the scientist clues.";
+        document.getElementById("resultIcon").textContent = "🌟";
+    } else if (percentage >= 50) {
+        message = "Good effort! Review the clues and try again.";
+        document.getElementById("resultIcon").textContent = "📚";
+    } else {
+        message = "Keep practising! You can improve with another attempt.";
+        document.getElementById("resultIcon").textContent = "💜";
+    }
+
+    document.getElementById("resultMessage").textContent = message;
+
+}
+
+function restartQuiz() {
+
+    currentQuestion = 0;
+    score = 0;
+    hasAnswered = false;
+
+    document.getElementById("score").textContent = "0";
+    document.getElementById("answered").textContent = "0/20";
+
+    document.getElementById("result").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+
+    document.getElementById("nextBtn").textContent = "Next Question →";
+
+    loadQuestion();
+
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
